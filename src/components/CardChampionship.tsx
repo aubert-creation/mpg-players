@@ -4,12 +4,13 @@ import { StyleSheet, Text, View, Image } from 'react-native'
 import { useQuery } from 'react-query'
 import { Card } from 'react-native-paper'
 
+import { PlayerStats } from '../../types'
 import { fetchPlayerStats } from '../api/PlayerAPI'
 
 import MatchScore from '../components/MatchScore'
 
 const CardChampionship = ({ type, player_id, title, club_id, clubs }: InferProps<typeof CardChampionship.propTypes>) => {
-  const player_stats_query = useQuery(['player_stats', player_id], () => fetchPlayerStats(player_id))
+  const player_stats_query = useQuery<PlayerStats, Error>(['player_stats', player_id], () => fetchPlayerStats(player_id))
   const [playerStats, setPlayerStats] = useState<Object>({})
 
   const { matches } = playerStats[type]?.clubs[club_id] ?? {}
