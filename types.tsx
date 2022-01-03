@@ -17,3 +17,22 @@ export type RootStackScreenProps<Screen extends keyof RootStackParamList> = Nati
   RootStackParamList,
   Screen
 >
+
+export interface Player {
+  id: string,
+  firstName?: string | null,
+  lastName?: string | null,
+  clubId?: string | null,
+  position: number,
+  ultraPosition: number,
+  quotation?: number | null,
+  stats: object
+}
+
+export interface PlayerStats {
+  id: string,
+  position: number,
+  type: string,
+  ultraPosition: number,
+  championships: object
+}

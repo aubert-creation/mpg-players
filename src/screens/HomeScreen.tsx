@@ -3,7 +3,7 @@ import { FlatList, StyleSheet, View } from 'react-native'
 import { useQuery } from 'react-query'
 import { DataTable, Searchbar } from 'react-native-paper'
 
-import { RootStackScreenProps } from '../types'
+import { RootStackScreenProps, Player } from '../types'
 import { fetchPlayers } from '../api/PlayerAPI'
 import Position from '../constants/Position'
 import { getPlayerName } from '../utils/player'
@@ -11,9 +11,9 @@ import { getPlayerName } from '../utils/player'
 import PositionFilterModal from '../components/PositionFilterModal'
 
 const HomeScreen = ({ navigation }: RootStackScreenProps<'Home'>) => {
-  const apiResponse = useQuery('players', fetchPlayers)
-  const [players, setPlayers] = useState<Array>([])
-  const [filteredPlayers, setFilteredPlayers] = useState<Array>([])
+  const apiResponse = useQuery<Player[], Error>('players', fetchPlayers)
+  const [players, setPlayers] = useState<Player[]>([])
+  const [filteredPlayers, setFilteredPlayers] = useState<Player[]>([])
   const [sortAsc, setSortAsc] = useState<boolean>(false)
   const [searchText, setSearchText] = useState<string>('')
   const [modalVisible, setModalVisible] = useState<boolean>(false)
@@ -33,7 +33,7 @@ const HomeScreen = ({ navigation }: RootStackScreenProps<'Home'>) => {
   }, [players, searchText, positions])
 
 
-  const sort = (datas: Array): Array => {
+  const sort = (datas: Player[]): Player[] => {
     return datas.slice().sort((player1, player2) =>
       (sortAsc ? player1.lastName < player2.lastName : player2.lastName < player1.lastName)
         ? 1
@@ -41,14 +41,14 @@ const HomeScreen = ({ navigation }: RootStackScreenProps<'Home'>) => {
     )
   }
 
-  const search = (): Array => {
+  const search = (): Player[] => {
     return players.filter((player) => {
       const display_name = getPlayerName(player)
       return display_name.includes(searchText)
     })
   }
 
-  const filter = (datas: Array): Array => {
+  const filter = (datas: Player[]): Player[] => {
     let selected_positions = Object.keys(positions).filter((i) => positions[i] === true)
 
     let filtered = datas
